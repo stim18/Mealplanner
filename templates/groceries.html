@@ -1,0 +1,743 @@
+<!---Matrikelnummern: 5911189 und 8441837-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meal Planner - Lebensmittel</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #cfe7fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            background-color: #007bff;
+            color: #fff;
+            width: 100%;
+            height: 10%;
+            padding: 10px;
+            text-align: center;
+            font-size: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 100px;
+        }
+
+        #logout-btn {
+            background-color: #fff;
+            color: #007bff;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        #logout-btn:hover {
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            margin-top: 8%;
+            height: 100vh;
+            background-color: #cfe7fa;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .left-box {
+            width: 29%;
+            min-height: 1640px;
+            background-color: #fff;
+            border-radius: 4px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin: 10px;
+            padding: 15px;
+            text-align: center;
+            text-decoration: none;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .middle-box{
+            width: 29%;
+            min-height: 1640px;
+            background-color: #fff;
+            border-radius: 4px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin: 10px;
+            padding: 15px;
+            text-align: center;
+            text-decoration: none;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .right-box {
+            width: 29%;
+            min-height: 1640px;
+            max-height: 1640px;
+            background-color: #fff;
+            border-radius: 4px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin: 10px;
+            padding: 15px;
+            text-align: center;
+            text-decoration: none;
+            color: #333;
+            overflow-y: auto;
+        }
+
+        .grocery-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            max-height: 40%;
+        }
+
+        .groceries-existingList {
+            width: 85%;
+            height: 250px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+
+        .grocery-item {
+            width: 85%;
+            margin: 10px;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .grocery-item h3 {
+            margin: 0;
+            margin-bottom: 10px;
+        }
+
+        .grocery-item input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .grocery-editItem {
+            width: 85%;
+            margin: 10px;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .grocery-editItem h3 {
+            margin: 0;
+            margin-bottom: 10px;
+        }
+
+        .grocery-editItem input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .grocery-deleteItem {
+            width: 85%;
+            height: 250px;
+            margin: 20px;
+            padding: 15px;
+            padding-top: 175px;
+            background-color: #f0f0f0;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow-y: auto;
+        }
+
+        .grocery-deleteItem h3 {
+            margin: 0;
+            margin-bottom: 10px;
+        }
+
+    </style>
+</head>
+<body>
+<div class="navbar">
+    <h1>Meal Planner - Lebensmittel</h1>
+    <div id="timer-container">
+        <div id="timer">10:00</div>
+        <button id="refresh-btn" onclick="restartTimer()">↻</button>
+        <button id="logout-btn" class="clickable" onclick="logout()">Logout</button>
+    </div>
+</div>
+<div class="container">
+    <div class="left-box">
+        <h2>Lebensmittel anlegen</h2>
+        <div class="groceries-list">
+            <div class="grocery-item">
+                <h3>Name:</h3>
+                <input type="text" id="nameInput" placeholder="Namen des Lebensmittels">
+            </div>
+            <div class="grocery-item">
+                <h3>Energie:</h3>
+                <input type="number" id="energyInput" placeholder="Angabe in kcal" value="0">
+            </div>
+            <div class="grocery-item">
+                <h3>Fett:</h3>
+                <input type="number" id="fatInput" placeholder="Angabe in Gramm" value="0">
+            </div>
+            <div class="grocery-item">
+                <h3>davon gesättigte Fettsäuren:</h3>
+                <input type="number" id="saturatedFatsInput" placeholder="Angabe in Gramm" value="0">
+            </div>
+            <div class="grocery-item">
+                <h3>Kohlenhydrate:</h3>
+                <input type="number" id="carbohydratesInput" placeholder="Angabe in Gramm" value="0">
+            </div>
+            <div class="grocery-item">
+                <h3>Zucker:</h3>
+                <input type="number" id="sugarInput" placeholder="Angabe in Gramm" value="0">
+            </div>
+            <div class="grocery-item">
+                <h3>Eiweiß:</h3>
+                <input type="number" id="proteinInput" placeholder="Angabe in Gramm" value="0">
+            </div>
+            <div class="grocery-item">
+                <h3>Salz:</h3>
+                <input type="number" id="saltInput" placeholder="Angabe in Gramm" value="0">
+            </div>
+            <div class="grocery-item">
+                <h3>Ballaststoffe:</h3>
+                <input type="number" id="fiberInput" placeholder="Angabe in Gramm" value="0">
+            </div>
+            <div class="grocery-item">
+                <h3>Wasser:</h3>
+                <input type="number" id="waterInput" placeholder="Angabe in Gramm" value="0">
+            </div>
+            <div class="grocery-item">
+                <h3>Gewicht:</h3>
+                <input type="number" id="weightInput" name="weight" placeholder="Angabe in Gramm" value="0">
+            </div>
+            <div class="grocery-item">
+                <h3>Verpackungstyp:</h3>
+                <input type="text" id="packagingTypeInput" name="packagingType" placeholder="Beispiele: Dose, Becher, Tüte etc." value="">
+            </div>
+            <div class="grocery-item">
+                <h3>Verpackungsgewicht:</h3>
+                <input type="number" id="packagingWeightInput" name="packagingWeight" placeholder="Gewicht des Verpackungsinhaltes" value="0">
+            </div>
+            <div class="grocery-item">
+                <button onclick="buttonAddNewGroceries()">Angaben speichern</button>
+            </div>
+        </div>
+    </div>
+    <div class="middle-box">
+        <h2>Lebensmittel bearbeiten</h2>
+        <div class="groceries-list">
+            <div class="grocery-editItem">
+                <h3>Lebensmittel auswählen:</h3>
+                <select class="groceries-dropdown" id="nameValue" name="name">
+                    <option value="selected">Namen auswählen</option>
+                </select>
+            </div>
+            <div class="grocery-editItem">
+                <h3>Energie:</h3>
+                <input type="number" id="energyValue" placeholder="Angabe in kcal" value="0">
+            </div>
+            <div class="grocery-editItem">
+                <h3>Fett:</h3>
+                <input type="number" id="fatValue" placeholder="Angabe in Gramm" value="0">
+            </div>
+            <div class="grocery-editItem">
+                <h3>davon gesättigte Fettsäuren:</h3>
+                <input type="number" id="saturatedFatsValue" placeholder="Angabe in Gramm" value="0">
+            </div>
+            <div class="grocery-editItem">
+                <h3>Kohlenhydrate:</h3>
+                <input type="number" id="carbohydratesValue" placeholder="Angabe in Gramm" value="0">
+            </div>
+            <div class="grocery-editItem">
+                <h3>Zucker:</h3>
+                <input type="number" id="sugarValue" placeholder="Angabe in Gramm" value="0">
+            </div>
+            <div class="grocery-editItem">
+                <h3>Eiweiß:</h3>
+                <input type="number" id="proteinValue" placeholder="Angabe in Gramm" value="0">
+            </div>
+            <div class="grocery-editItem">
+                <h3>Salz:</h3>
+                <input type="number" id="saltValue" placeholder="Angabe in Gramm" value="0">
+            </div>
+            <div class="grocery-editItem">
+                <h3>Ballaststoffe:</h3>
+                <input type="number" id="fiberValue" placeholder="Angabe in Gramm" value="0">
+            </div>
+            <div class="grocery-editItem">
+                <h3>Wasser:</h3>
+                <input type="number" id="waterValue" placeholder="Angabe in Gramm" value="0">
+            </div>
+            <div class="grocery-editItem">
+                <h3>Gewicht:</h3>
+                <input type="number" id="weightValue" placeholder="Angabe in Gramm" value="0">
+            </div>
+            <div class="grocery-editItem">
+                <h3>Verpackungstyp:</h3>
+                <input type="text" id="packagingTypeValue" placeholder="Beispiele: Dose, Becher, Tüte etc." value="">
+            </div>
+            <div class="grocery-editItem">
+                <h3>Verpackungsgewicht:</h3>
+                <input type="number" id="packagingWeightValue" placeholder="Gewicht des Verpackungsinhaltes" value="0">
+            </div>
+            <div class="grocery-editItem">
+                <!-- You can customize the button text and functionality as needed -->
+                <button onclick="buttonEditGroceries()">Angaben speichern</button>
+            </div>
+        </div>
+    </div>
+    <div class="right-box">
+        <h2>Lebensmittel Löschen</h2>
+        <h4>Angaben der Nährwerte in 100 Gramm</h4>
+        <div class="groceries-list">
+            <div class="groceries-existingList">
+            <!-- function loadAndDisplayGroceries -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    async function loadAndDisplayGroceries() {
+        try {
+            // Fetch Groceries data from the server endpoint
+            const response = await fetch('/getGroceries');
+            const groceries = await response.json();
+
+            // Clear the existing options in the groceries-list
+            const groceriesList = document.querySelector('.groceries-existingList');
+            groceriesList.innerHTML = '';
+
+            // Populate groceries-list with fetched groceries
+            for (let key in groceries) {
+                if (groceries.hasOwnProperty(key)) {
+                    const grocery = groceries[key];
+
+                    const groceryItem = document.createElement('div');
+                    groceryItem.classList.add('grocery-deleteItem');
+
+                    const groceryDetails = `
+                    <h3>${grocery.Name}</h3>
+                    <p>Energy: ${grocery.Energy}</p>
+                    <p>Fat: ${grocery.Fat}</p>
+                    <p>SaturatedFats: ${grocery.SaturatedFats}</p>
+                    <p>Carbohydrates: ${grocery.Carbohydrates}</p>
+                    <p>Sugar: ${grocery.Sugar}</p>
+                    <p>Protein: ${grocery.Protein}</p>
+                    <p>Salt: ${grocery.Salt}</p>
+                    <p>Fiber: ${grocery.Fiber}</p>
+                    <p>Water: ${grocery.Water}</p>
+                    <p>Weight: ${grocery.Weight}</p>
+                     <button class="show-details-button" onclick="deleteGrocerie('${grocery.Name}')">
+                        Delete
+                    </button>
+                `;
+                    groceryItem.innerHTML = groceryDetails;
+
+                    groceriesList.appendChild(groceryItem);
+                }
+            }
+        } catch (error) {
+            console.error('Error loading groceries:', error);
+        }
+    }
+
+    function deleteGrocerie(name) {
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", "/deleteGroceries", true);
+        xhr.setRequestHeader("Content-Type", "application/json");
+
+        const data = {
+            Name: name,
+        };
+
+        xhr.send(JSON.stringify(data));
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    alert('Details saved successfully!');
+                    setTimeout(() => {
+                        location.reload();
+                    }, 100);
+                } else {
+                    alert('Failed to save details!');
+                }
+            }
+        };
+    }
+
+    async function createDropdownOptions() {
+        // Fetch Groceries data from the server endpoint
+        const response = await fetch('/getGroceries');
+        const groceries = await response.json();
+
+        const dropdown = document.querySelector('.groceries-dropdown');
+        dropdown.innerHTML = '';
+
+        for (let key in groceries) {
+            if (groceries.hasOwnProperty(key)) {
+                const grocery = groceries[key];
+
+                const option = document.createElement('option');
+                option.value = grocery.Name;
+                option.textContent = grocery.Name;
+                dropdown.appendChild(option);
+            }
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        loadAndDisplayGroceries();
+        createDropdownOptions();
+    });
+
+    let timeRemaining = 300;
+
+    function updateTimer() {
+        const minutes = Math.floor(timeRemaining / 60);
+        const seconds = timeRemaining % 60;
+        document.getElementById('timer').innerText = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    }
+
+    function restartTimer() {
+        timeRemaining = 300;
+        updateTimer();
+    }
+
+    function countdown() {
+        updateTimer();
+
+        if (timeRemaining > 0) {
+            timeRemaining--;
+            setTimeout(countdown, 1000);
+        } else {
+            logout();
+            alert('Zeit abgelaufen. Du wurdest ausgeloggt.');
+        }
+    }
+
+    function buttonAddNewGroceries() {
+
+        // Check if the first grocery item has inputs
+        const firstGroceryItem = document.querySelector('.grocery-item:first-child');
+        const nameInput = firstGroceryItem.querySelector('#nameInput');
+
+        // Access to the inputValues
+        const name = document.getElementById('nameInput').value;
+        const energy = document.getElementById('energyInput').value;
+        const fat = document.getElementById('fatInput').value;
+        const saturatedFats = document.getElementById('saturatedFatsInput').value;
+        const carbohydrates = document.getElementById('carbohydratesInput').value;
+        const sugar = document.getElementById('sugarInput').value;
+        const protein = document.getElementById('proteinInput').value;
+        const salt = document.getElementById('saltInput').value;
+        const fiber = document.getElementById('fiberInput').value;
+        const water = document.getElementById('waterInput').value;
+        const weight = document.getElementById('weightInput').value;
+        const packagingType = document.getElementById('packagingTypeInput').value;
+        const packagingWeight = document.getElementById('packagingWeightInput').value;
+
+        // If the name input is not empty, proceed to save the details
+        if (nameInput && nameInput.value.trim() !== '')
+        {
+            // ohne Eingabe passt, wenn beide noch nicht
+            const hasValidWeight = weight !== '' && weight !== '0';
+            const hasValidPackagingForWeight = packagingType === '' && (packagingWeight === '0' || packagingWeight === 0);
+            const hasValidPackaging = packagingType !== '' && packagingWeight !== 0;
+
+            if (hasValidWeight === true && hasValidPackagingForWeight === true)
+            {
+                console.log("Weight=true")
+
+                // AJAX-Anfrage erstellen
+                const xhr = new XMLHttpRequest();
+                xhr.open("POST", "/addGroceries", true);
+                xhr.setRequestHeader("Content-Type", "application/json");
+
+                // Daten senden
+                const data = {
+                    Name: name,
+                    Energy: energy,
+                    Fat: fat,
+                    SaturatedFats: saturatedFats,
+                    Carbohydrates: carbohydrates,
+                    Sugar: sugar,
+                    Protein: protein,
+                    Salt: salt,
+                    Fiber: fiber,
+                    Water: water,
+                    Weight: weight,
+                    PackagingType: packagingType,
+                    PackagingWeight: packagingWeight,
+                };
+
+                xhr.send(JSON.stringify(data));
+
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            alert('Details saved successfully!');
+                            setTimeout(() => {
+                                location.reload();
+                            }, 100);
+                        } else {
+                            alert('Failed to save details!');
+                        }
+                    }
+                };
+
+                // Clear all input values in all grocery items
+                const allGroceryItems = document.querySelectorAll('.grocery-item');
+                allGroceryItems.forEach(groceryItem => {
+                    const inputFields = groceryItem.querySelectorAll('input');
+                    inputFields.forEach(input => input.value = '');
+                });
+            } else if (hasValidWeight === false && hasValidPackaging === true)
+            {
+                console.log("Weight=false")
+                // AJAX-Anfrage erstellen
+                const xhr = new XMLHttpRequest();
+                xhr.open("POST", "/addGroceries", true);
+                xhr.setRequestHeader("Content-Type", "application/json");
+
+                // Daten senden
+                const data = {
+                    Name: name,
+                    Energy: energy,
+                    Fat: fat,
+                    SaturatedFats: saturatedFats,
+                    Carbohydrates: carbohydrates,
+                    Sugar: sugar,
+                    Protein: protein,
+                    Salt: salt,
+                    Fiber: fiber,
+                    Water: water,
+                    Weight: weight,
+                    PackagingType: packagingType,
+                    PackagingWeight: packagingWeight,
+                };
+
+                xhr.send(JSON.stringify(data));
+
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            alert('Details saved successfully!');
+                            setTimeout(() => {
+                                location.reload();
+                            }, 100);
+                        } else {
+                            alert('Failed to save details!');
+                        }
+                    }
+                };
+
+                // Clear all input values in all grocery items
+                const allGroceryItems = document.querySelectorAll('.grocery-item');
+                allGroceryItems.forEach(groceryItem => {
+                    const inputFields = groceryItem.querySelectorAll('input');
+                    inputFields.forEach(input => input.value = '');
+                });
+            }else
+            {
+                // Show an error message or take appropriate action
+                alert('Eingabe Fehlerhaft: Entweder Gewicht oder Verpackungstyp und Verpackungsgewicht müssen einen Wert besitzen');
+            }
+        } else{
+            // Show an error message or take appropriate action
+            alert('Eingabe Fehlerhaft: Name muss einen Wert besitzen');
+        }
+    }
+
+    function buttonEditGroceries() {
+        // Check if the first grocery item has inputs
+        const firstGroceryItem = document.querySelector('.grocery-editItem:first-child');
+        const nameDropdown = firstGroceryItem.querySelector('#nameValue');
+
+        // Get the selected name from the dropdown
+        const selectedName = nameDropdown.options[nameDropdown.selectedIndex].value;
+
+        // Access to the inputValues
+        const energy = document.getElementById('energyValue').value;
+        const fat = document.getElementById('fatValue').value;
+        const saturatedFats = document.getElementById('saturatedFatsValue').value;
+        const carbohydrates = document.getElementById('carbohydratesValue').value;
+        const sugar = document.getElementById('sugarValue').value;
+        const protein = document.getElementById('proteinValue').value;
+        const salt = document.getElementById('saltValue').value;
+        const fiber = document.getElementById('fiberValue').value;
+        const water = document.getElementById('waterValue').value;
+        const weight = document.getElementById('weightValue').value;
+        const packagingType = document.getElementById('packagingTypeValue').value;
+        const packagingWeight = document.getElementById('packagingWeightValue').value;
+
+        // If the selected name is not empty, proceed to save the details
+        if (selectedName && selectedName !== '') {
+            // ohne Eingabe passt, wenn beide noch nicht
+            const hasValidWeight = weight !== '' && weight !== '0';
+            const hasValidPackagingForWeight = packagingType === '' && (packagingWeight === '0' || packagingWeight === 0);
+            const hasValidPackaging = packagingType !== '' && packagingWeight !== 0;
+
+            if (hasValidWeight && hasValidPackagingForWeight) {
+                // AJAX-Anfrage erstellen
+                const xhr = new XMLHttpRequest();
+                xhr.open("POST", "/editGroceries", true);
+                xhr.setRequestHeader("Content-Type", "application/json");
+
+                // Daten senden
+                const data = {
+                    Name: selectedName, // Use the selected name
+                    Energy: energy,
+                    Fat: fat,
+                    SaturatedFats: saturatedFats,
+                    Carbohydrates: carbohydrates,
+                    Sugar: sugar,
+                    Protein: protein,
+                    Salt: salt,
+                    Fiber: fiber,
+                    Water: water,
+                    Weight: weight,
+                    PackagingType: packagingType,
+                    PackagingWeight: packagingWeight,
+                };
+
+                xhr.send(JSON.stringify(data));
+
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            alert('Details saved successfully!');
+                            setTimeout(() => {
+                                location.reload();
+                            }, 100);
+                        } else {
+                            alert('Failed to save details!');
+                        }
+                    }
+                };
+
+                // Clear all input values in all grocery items
+                const allGroceryItems = document.querySelectorAll('.grocery-item');
+                allGroceryItems.forEach(groceryItem => {
+                    const inputFields = groceryItem.querySelectorAll('input');
+                    inputFields.forEach(input => input.value = '');
+                });
+            } else if (!hasValidWeight && hasValidPackaging) { // corrected the structure of this condition
+                // AJAX-Anfrage erstellen
+                const xhr = new XMLHttpRequest();
+                xhr.open("POST", "/editGroceries", true);
+                xhr.setRequestHeader("Content-Type", "application/json");
+
+                // Daten senden
+                const data = {
+                    Name: selectedName, // Use the selected name
+                    Energy: energy,
+                    Fat: fat,
+                    SaturatedFats: saturatedFats,
+                    Carbohydrates: carbohydrates,
+                    Sugar: sugar,
+                    Protein: protein,
+                    Salt: salt,
+                    Fiber: fiber,
+                    Water: water,
+                    Weight: weight,
+                    PackagingType: packagingType,
+                    PackagingWeight: packagingWeight,
+                };
+
+                xhr.send(JSON.stringify(data));
+
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            alert('Details saved successfully!');
+                            setTimeout(() => {
+                                location.reload();
+                            }, 100);
+                        } else {
+                            alert('Failed to save details!');
+                        }
+                    }
+                };
+
+                // Clear all input values in all grocery items
+                const allGroceryItems = document.querySelectorAll('.grocery-item');
+                allGroceryItems.forEach(groceryItem => {
+                    const inputFields = groceryItem.querySelectorAll('input');
+                    inputFields.forEach(input => input.value = '');
+                });
+            } else {
+                // Show an error message or take appropriate action
+                alert('Eingabe Fehlerhaft: Entweder Gewicht oder Verpackungstyp und Verpackungsgewicht müssen einen Wert besitzen');
+            }
+        } else {
+            // Show an error message or take appropriate action
+            alert('Eingabe Fehlerhaft: Name muss einen Wert besitzen');
+        }
+    }
+
+    function logout(){
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", "/logout", true); // Pfad anpassen, wenn nötig
+        xhr.setRequestHeader("Content-Type", "application/json");
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    console.log("Logout erfolgreich");
+                } else {
+                    console.error("Fehler beim Logout:", xhr.status);
+                }
+            }
+        };
+
+        xhr.send();
+
+        window.location.href = './logout.html';
+    }
+
+    countdown();
+</script>
+</body>
+</html>
